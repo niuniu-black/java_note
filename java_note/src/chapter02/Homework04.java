@@ -1,6 +1,6 @@
 package chapter02;
 
-public class Homewoek04 {
+public class Homework04 {
     /*
     环境变量path配置及其作用
     答：
