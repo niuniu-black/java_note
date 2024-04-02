@@ -87,7 +87,7 @@ public class MyPanel extends JPanel implements KeyListener {
                 g.fillOval(x + 10, y + 20, 20, 20);  // 画出坦克炮台
                 g.drawLine(x + 20, y + 30, x + 20, y + 60);  // 画出坦克的炮筒
                 break;
-            case 3:  // 表示向右
+            case 3:  // 表示向左
                 g.fill3DRect(x, y, 60, 10, false);  // 画出坦克上边轮子
                 g.fill3DRect(x, y + 30, 60, 10, false);  // 画出坦克下边轮子
                 g.fill3DRect(x + 10, y + 10, 40, 20, false);  // 画出坦克身体
