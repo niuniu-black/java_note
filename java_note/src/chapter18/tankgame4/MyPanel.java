@@ -23,8 +23,18 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
 //        myTank.setSpeed(1);  // 设置坦克移动速度
         // 初始化敌人坦克
         for (int i = 0; i < enemyTankSize; i++) {
+            // 创建一个敌人的坦克
             EnemyTank enemyTank = new EnemyTank((100 * (i + 1)), 0);
+            // 设置方向
             enemyTank.setDirect(2);
+            // 给该 enemyTank 加入一颗子弹
+//            Shot shot = new Shot(enemyTank.getX() + 20, enemyTank.getY() + 60, enemyTank.getDirect());
+            Shot shot = new Shot(enemyTank);
+            // 加入 enemyTank 的 Vector 成员
+            enemyTank.shots.add(shot);
+            // 启动 shot 对象
+            new Thread(shot).start();
+
             enemyTanks.add(enemyTank);
         }
     }
@@ -37,15 +47,27 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
         // 画出坦克-封装成方法
         drawTank(myTank.getX(), myTank.getY(), g, myTank.getDirect(), 1);
 
-        // 画出敌方坦克
+        // 画出敌方坦克，遍历 Vector
         for (int i = 0; i < enemyTanks.size(); i++) {
             // 取出坦克
             EnemyTank enemyTank = enemyTanks.get(i);
             drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 0);
+            // 画出 enemyTank 所有子弹
+            for (int j = 0; j < enemyTank.shots.size(); j++) {
+                // 取出子弹
+                Shot shot = enemyTank.shots.get(j);
+                // 绘制
+                if (shot.isLive()) {  // isLive == true
+                    drawBullet(shot.getX(), shot.getY(), g, 0);
+                } else {
+                    // 从 Vector 移除
+                    enemyTank.shots.remove(shot);
+                }
+            }
         }
 
         // 画出子弹-封装成方法
-        if (myTank.getShot() != null && myTank.getShot().isLive() == true) {
+        if (myTank.getShot() != null && myTank.getShot().isLive()) {
             drawBullet(myTank.getShot().getX(), myTank.getShot().getY(), g, 1);
 //            g.fillOval(myTank.getShot().getX(), myTank.getShot().getY(), 2, 2);
             System.out.println("bullet x=" + myTank.getShot().getX() + " y=" + myTank.getShot().getY());
@@ -111,10 +133,10 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
     /**
      * 绘制子弹轨迹，从炮筒的的坐标开始
      *
-     * @param x      子弹左上角坐标
-     * @param y      子弹右上角坐标
-     * @param g      画笔
-     * @param type   坦克类型  0-敌人坦克的子弹  1-自己坦克的子弹
+     * @param x    子弹左上角坐标
+     * @param y    子弹右上角坐标
+     * @param g    画笔
+     * @param type 坦克类型  0-敌人坦克的子弹  1-自己坦克的子弹
      */
     public void drawBullet(int x, int y, Graphics g, int type) {
 

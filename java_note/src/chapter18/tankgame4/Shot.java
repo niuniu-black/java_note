@@ -59,6 +59,12 @@ public class Shot implements Runnable {
         this.tank = tank;
     }
 
+    public Shot(int x, int y, int direct) {
+        this.x = x;
+        this.y = y;
+        this.direct = direct;
+    }
+
     @Override
     public void run() {
 
